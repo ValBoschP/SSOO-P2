@@ -1,0 +1,5 @@
+/home/valer/SSOO-P2/copyfile/build/CMakeFiles/edit_cache.dir
+/home/valer/SSOO-P2/copyfile/build/CMakeFiles/rebuild_cache.dir
+/home/valer/SSOO-P2/copyfile/build/src/CMakeFiles/Copyfile.dir
+/home/valer/SSOO-P2/copyfile/build/src/CMakeFiles/edit_cache.dir
+/home/valer/SSOO-P2/copyfile/build/src/CMakeFiles/rebuild_cache.dir
