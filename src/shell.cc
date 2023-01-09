@@ -1,3 +1,18 @@
+/**
+ * Universidad de La Laguna
+ * Escuela Superior de Ingeniería y Tecnología
+ * Grado en Ingeniería Informática
+ * Asignatura: Sistemas Operativos
+ * Curso: 2º
+ * Práctica 2: SHELL PROJECT
+ * @autor: Valeria Bosch Pérez (alu0101485287@ull.edu.es)
+ * @date: 3 Jan 2023
+ * @file: shell.cc
+ * @brief: shell class functions
+ * Referencias:
+ * Enlaces de interés
+ */
+
 #include <sys/wait.h>
 
 #include "shell.h"
@@ -65,39 +80,9 @@ int Shell::MvCommand(const std::vector<std::string>& args) {
 
 int Shell::EchoCommand(const std::vector<std::string>& args) {
   try {
-    bool in_quotes = false;
-    std::stringstream output;
     for (int i = 1; i < args.size(); ++i) {
-      std::string arg = args[i];
-      if (arg[0] == '"') {
-        if (arg[arg.size() - 1] == '"') {
-          arg = arg.substr(1, arg.size() - 2);
-        } else {
-          in_quotes = true;
-          arg = arg.substr(1);
-        }
-      }
-      if (in_quotes) {
-        if (arg[arg.size() - 1] == '"') {
-          in_quotes = false;
-          arg = arg.substr(0, arg.size() - 1);
-        }
-        while (in_quotes && i < args.size() - 1) {
-          arg += ' ' + args[++i];
-          if (arg[arg.size() - 1] == '"') {
-            in_quotes = false;
-            arg = arg.substr(0, arg.size() - 1);
-          }
-        }
-      }
-      if (in_quotes || arg[arg.size() - 1] == '"') {
-        std::throw_with_nested(std::runtime_error("ERROR: Unbalanced quotes"));
-        return 1;
-      }
-      output << arg << " ";
+      std::cout << args[i] << " ";
     }
-    output << std::endl;
-    std::cout << output.str();
   } catch (const std::system_error& error) {
     std::throw_with_nested(std::runtime_error("ERROR: echo command failed!"));
   }
@@ -167,10 +152,14 @@ void Shell::Run() {
   std::vector<std::vector<std::string>> commands;
   std::string line;
   int last_command_status = 0;
+  // Bucle principal de la SHELL
   while (true) {
     try {
+      // Imprimir el prompt
       PrintPrompt(last_command_status);
+      // Lee la línea 
       line = ReadLine(STDIN_FILENO);
+      // Divide la entrada en comandos
       commands = ParseLine(line);
       if (line.empty()) continue;
       for (const auto& cmd : commands) {
