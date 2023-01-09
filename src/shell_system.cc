@@ -130,7 +130,7 @@ std::vector<std::string> SplitSpaces(const std::string& input_string) {
  */
 std::vector<std::vector<std::string>> ParseLine(const std::string& line) {
   std::vector<std::vector<std::string>> result;
-  auto commands = Split(line, std::vector<char>{'|', ';'}, std::vector<char>());
+  auto commands = Split(line, std::vector<char>{'|', ';', '&'}, std::vector<char>());
   for (const auto& command : commands) {
     auto token = SplitSpaces(line);
     result.emplace_back(token);
@@ -285,13 +285,13 @@ void PrintPrompt(int last_command_status) {
   std::string work_directory = current_work_directory;
   std::string home = getpwuid(getuid())->pw_dir;
   std::string root = "~";
-
   size_t pos = work_directory.find(home);
   if (pos != std::string::npos) {
     work_directory.replace(pos, home.length(), root);
   }
-  std::string arrow = last_command_status == 0 ? "> " : "< ";
-  prompt << username << "@" << hostname << work_directory << last_command_status << arrow << std::endl;
+  std::string arrow = last_command_status == 0 ? "► " : "◄ ";
+  prompt << username << "@" << hostname << ":/" << work_directory << std::endl;
+  prompt << arrow << " ";
   PrintLine(prompt.str());
 }
 
@@ -318,6 +318,7 @@ std::string ReadLine(int fd) {
       }
       std::vector<uint8_t> buffer(1024ul);
       int bytes_read = read(fd, buffer.data(), buffer.size());
+      if (bytes_read == 0) exit(EXIT_SUCCESS);
       if (bytes_read < 0) throw std::system_error(errno, std::system_category());
       if (buffer.empty()) {
         if (!pending_input.empty()) {
