@@ -1,0 +1,1 @@
+/usr/bin/c++ -g -Wl,--export-dynamic -rdynamic CMakeFiles/Shell.dir/main.cc.o CMakeFiles/Shell.dir/shell.cc.o CMakeFiles/Shell.dir/shell_system.cc.o CMakeFiles/Shell.dir/usages.cc.o -o ../bin/Shell 

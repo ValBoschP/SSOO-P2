@@ -1,4 +1,4 @@
-#include "shell-system.h"
+#include "shell_system.h"
 #include "scope_exit.h"
 
 /**
@@ -17,7 +17,7 @@ std::vector<uint8_t> ReadFile(const int fd) {
     buffer.resize(bytes_read);
     return buffer;
   } catch (const std::exception& error) {
-    std::throw_with_nested(std::runtime_error("Error reading file"));
+    std::throw_with_nested(std::runtime_error("ERROR: Reading file failed!"));
   }
 }
 
@@ -34,7 +34,7 @@ std::vector<uint8_t> WriteFile(int fd, std::vector<uint8_t> buffer) {
     write(fd, buffer.data(), buffer.size());
     return buffer;
   } catch (const std::exception& error) {
-    std::throw_with_nested(std::runtime_error("Error writing the file"));
+    std::throw_with_nested(std::runtime_error("ERROR: Writing file failed!"));
   }
 }
 

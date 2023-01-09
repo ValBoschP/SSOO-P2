@@ -1,5 +1,6 @@
+#include <sys/wait.h>
+
 #include "shell.h"
-#include "shell-system.h"
 #include "usages.h"
 
 int Shell::CdCommand(const std::vector<std::string>& args) {
@@ -113,7 +114,7 @@ CommandResult Shell::ExecuteCommand(const std::vector<std::string>& commands) {
       }
     }
     //if (incorrect_command) std::throw_with_nested(std::runtime_error("The introduced command was unexpected"));
-    if (commands[0] == "exit") return CommandResult::quit();
+    if (commands[0] == "exit") return CommandResult::Quit();
     else if (commands[0] == "cp") {
       return CommandResult(CpCommand(commands), false);
     } else if (commands[0] == "cd") {
@@ -128,7 +129,33 @@ CommandResult Shell::ExecuteCommand(const std::vector<std::string>& commands) {
   } catch (const std::exception& error) {
     std::throw_with_nested(std::runtime_error("ERROR: Executing commands failed!"));
   }
-  return CommandResult::quit();
+  return CommandResult::Quit();
+}
+
+int Shell::ExecuteProgram(const std::vector<std::string>& args, bool has_wait = true) {
+  try {
+    pid_t pid = fork();
+    if (pid < 0) std::throw_with_nested(std::runtime_error("ERROR: Creating the process!"));
+    if (pid > 0) {
+      if (has_wait) {
+        int status;
+        waitpid(pid, &status, 0);
+        return WEXITSTATUS(status);
+      } else {
+        return pid;
+      }
+    } else {
+      char** argv = new char*[args.size() + 1];
+      for (int i = 0; i < args.size(); i++) {
+        argv[i] = const_cast<char*>(args[i].c_str());
+      }
+      argv[args.size()] = nullptr;
+      if (execvp(argv[0], argv) < 0) exit(EXIT_FAILURE);
+    }
+    return 0;
+  } catch (const std::exception& error) {
+    std::throw_with_nested(std::runtime_error("ERROR: Executing function failed!"));
+  }
 }
 
 void PrintError(const std::string& error) {
@@ -148,12 +175,13 @@ void Shell::Run() {
       if (line.empty()) continue;
       for (const auto& cmd : commands) {
         auto [return_value, is_quit_requested] = ExecuteCommand(cmd);
-        std::cout << std::endl;
         if (is_quit_requested) exit(EXIT_SUCCESS);
+        std::cout << std::endl;
         last_command_status = return_value;
         if (return_value != 0) PrintError("ERROR: Executing command failed!");
       }
     } catch (const std::exception& error) {
+      std::cout << std::endl;
       PrintError(error.what());
       last_command_status = 1;
     }

@@ -21,9 +21,9 @@ struct CommandResult {
   bool is_quit_requested;
   CommandResult(int return_value, bool request_quit = false) : return_value{return_value}, is_quit_requested{request_quit} {}
 
-  static CommandResult quit(int return_value = 0) {
+  static CommandResult Quit(int return_value = 0) {
     return CommandResult{return_value, true};
-  }
+  };
 };
 
 std::vector<uint8_t> ReadFile(const int fd);
