@@ -12,7 +12,7 @@
 class Shell {
  public:
  // Constructor
-  Shell() {}
+  Shell(const pid_t& procces_id) : procces_id_(procces_id) {}
 
 // Getter
   inline const std::vector<std::string>& GetInternalCommands() const { return internal_commands_; }
@@ -29,6 +29,7 @@ class Shell {
   void Run();
 
  private:
+  pid_t procces_id_;
   std::vector<std::string> internal_commands_ = { "cd", "echo", "cp", "mv", "exit" };
 };
 

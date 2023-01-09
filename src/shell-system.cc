@@ -137,7 +137,7 @@ void CopyFile(const std::string& source_path, const std::string& destination_pat
     struct stat source_path_stat{};
     if (stat(source_path.c_str(), &source_path_stat) == -1  || !S_ISREG(source_path_stat.st_mode)) {
       // Da una excepción si el camino origen no existe
-      std::throw_with_nested(std::runtime_error("Source path does not exist or source file is not a regular file"));
+      std::throw_with_nested(std::runtime_error("ERROR: Source path does not exist or source file is not a regular file!"));
     }
     // Obtiene el camino de destino y el nombre de directorio de destino
     std::string destination_path_copy = destination_path;
@@ -146,7 +146,7 @@ void CopyFile(const std::string& source_path, const std::string& destination_pat
     struct stat dst_dir_name_stat{};
     // Comprueba si el directorio de destino existe
     if (stat(dst_dir_name.c_str(), &dst_dir_name_stat) == -1) {
-      std::throw_with_nested(std::runtime_error("Destination path does not exist"));
+      std::throw_with_nested(std::runtime_error("ERROR: Destination path does not exist!"));
     }
     // Comprueba si el camino de destino es un directorio
     struct stat destination_path_stat{};
@@ -196,7 +196,7 @@ void CopyFile(const std::string& source_path, const std::string& destination_pat
       utime(destination_path_copy.c_str(), &times);
     }
   } catch (const std::exception& error) {
-    std::throw_with_nested(std::runtime_error("Error copying the file!"));
+    std::throw_with_nested(std::runtime_error("ERROR: Copying the file!"));
   }
 }
 
@@ -210,7 +210,7 @@ void MoveFile(const std::string& source_path, const std::string& destination_pat
   try {
     struct stat source_path_stat{};
     if (stat(source_path.c_str(), &source_path_stat) == -1  || !S_ISREG(source_path_stat.st_mode)) {
-     std::throw_with_nested(std::runtime_error("Source path does not exist or source file is not a regular file"));
+     std::throw_with_nested(std::runtime_error("ERROR: Source path does not exist or source file is not a regular file!"));
     }
 
     std::string destination_path_copy = destination_path;
@@ -218,7 +218,7 @@ void MoveFile(const std::string& source_path, const std::string& destination_pat
     std::string dst_dir_name = dirname(c_destination_path);
     struct stat dst_dir_name_stat{};
     if (stat(dst_dir_name.c_str(), &dst_dir_name_stat) == -1) {
-      std::throw_with_nested(std::runtime_error("Destination path does not exist"));
+      std::throw_with_nested(std::runtime_error("ERROR: Destination path does not exist!"));
     }
 
     struct stat destination_path_stat{};
@@ -241,7 +241,7 @@ void MoveFile(const std::string& source_path, const std::string& destination_pat
       unlink(source_path.c_str());
     }
   } catch (const std::exception& error) {
-    std::throw_with_nested(std::runtime_error("Error moving file"));
+    std::throw_with_nested(std::runtime_error("ERROR: Moving the file!"));
   }
 }
 
@@ -263,26 +263,20 @@ void PrintPrompt(int last_command_status) {
   if (!isatty(STDIN_FILENO)) return;
   char* username = getpwuid(getuid())->pw_name;
   char* hostname = new char[1024];
-  char* current_work_dir = new char[1024];
+  char* current_work_directory = new char[1024];
   gethostname(hostname, 1024);
-  getcwd(current_work_dir, 1024);
+  getcwd(current_work_directory, 1024);
   std::stringstream prompt;
-  std::string work_dir = current_work_dir;
+  std::string work_directory = current_work_directory;
   std::string home = getpwuid(getuid())->pw_dir;
-  std::string symbol = "~";
+  std::string root = "~";
 
-  size_t pos = work_dir.find(home);
+  size_t pos = work_directory.find(home);
   if (pos != std::string::npos) {
-    work_dir.replace(pos, home.length(), symbol);
+    work_directory.replace(pos, home.length(), root);
   }
-
-  std::string status;
-  if (last_command_status == 0) status = "\x1b[37;42;1m ";
-  else status = "\x1b[37;41;1m ";
-
-  prompt << "\x1b[37;45;1m\033[3m " << username << "@" << hostname << " \x1b[0m\x1b[30;46;3m " << work_dir << " \x1b[0m\x1b[30;42;3m" << status << last_command_status << " \x1b[0m " << std::endl;
   std::string arrow = last_command_status == 0 ? "> " : "< ";
-  prompt << "\x1b[37;45;1m " << arrow << "\x1b[0m ";
+  prompt << username << "@" << hostname << work_directory << last_command_status << arrow << std::endl;
   PrintLine(prompt.str());
 }
 
