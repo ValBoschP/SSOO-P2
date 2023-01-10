@@ -12,13 +12,6 @@
  * Referencias:
  * Enlaces de interés
  */
-#include <filesystem>
-#include <vector>
-#include <string>
-#include <sstream>
-#include <iostream>
-#include <libgen.h>
-#include <exception>
 
 #include "shell.h"
 #include "usages.h"

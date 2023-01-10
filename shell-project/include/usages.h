@@ -15,6 +15,13 @@
 #ifndef USAGES_H
 #define USAGES_H
 
+#include <filesystem>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <libgen.h>
+#include <exception>
 #include <exception>
 
 void Usage(const int argc, const char* argv[]);

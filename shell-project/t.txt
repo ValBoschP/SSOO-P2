@@ -1,0 +1,3 @@
+echo hola  a
+echo todos
+ls
