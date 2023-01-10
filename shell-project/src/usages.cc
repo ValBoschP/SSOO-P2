@@ -12,12 +12,12 @@
  * Referencias:
  * Enlaces de interés
  */
-#include <iostream>
-#include <libgen.h>
 #include <filesystem>
 #include <vector>
 #include <string>
 #include <sstream>
+#include <iostream>
+#include <libgen.h>
 #include <exception>
 
 #include "shell.h"
@@ -33,13 +33,9 @@ void Usage(const int argc, const char* argv[]) {
   try {
     if (args.size() > 1 && (args[1] == "--help" || args[1] == "-h")) {
       std::cout << "      -- SHELL --" << std::endl;
-      std::cout << "HOW TO USE: " << args[0] << "[src] [dst]\n\n";
-      std::cout << "[src]: The file to be copied\n";
-      std::cout << "[dst]: The destination file where the file will be copied\n";
-      std::cout << "\nPARAMETERS\n\n";
-      std::cout << "-h: Shows this message\n";
-      std::cout << "-m: Move the file instead of copying it\n";
-      std::cout << "-a: Copy the attributes of the original file\n\n";
+      std::cout << "HOW TO USE: " << args[0] << std::endl;
+      std::cout << "\n     --INFORMATION ABOUT THE PROGRAM --" << std::endl;
+      std::cout << "It works like a shell, but poorly :)" << std::endl;
       exit(EXIT_SUCCESS);
     } 
     if (argc > 2 ) {

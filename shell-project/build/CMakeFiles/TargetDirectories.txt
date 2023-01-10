@@ -1,0 +1,5 @@
+/home/valeria/Escritorio/weas_uni/SSOO/SSOO-P2/shell-project/build/CMakeFiles/edit_cache.dir
+/home/valeria/Escritorio/weas_uni/SSOO/SSOO-P2/shell-project/build/CMakeFiles/rebuild_cache.dir
+/home/valeria/Escritorio/weas_uni/SSOO/SSOO-P2/shell-project/build/src/CMakeFiles/Shell.dir
+/home/valeria/Escritorio/weas_uni/SSOO/SSOO-P2/shell-project/build/src/CMakeFiles/edit_cache.dir
+/home/valeria/Escritorio/weas_uni/SSOO/SSOO-P2/shell-project/build/src/CMakeFiles/rebuild_cache.dir
